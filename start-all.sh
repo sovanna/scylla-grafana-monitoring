@@ -2,7 +2,7 @@
 
 if [ "$1" = "-e" ]; then
 . enterprise_versions.sh
-else		
+else
 . versions.sh
 fi
 VERSIONS=$DEFAULT_VERSION
@@ -76,16 +76,16 @@ fi
 if [ -z $DATA_DIR ]
 then
     sudo docker run -d $LOCAL \
-         -v $PWD/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:Z \
-         -v $(readlink -m $SCYLLA_TARGET_FILE):/etc/scylla.d/prometheus/scylla_servers.yml:Z \
-         -v $(readlink -m $NODE_TARGET_FILE):/etc/scylla.d/prometheus/node_exporter_servers.yml:Z \
+         -v $PWD/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml \
+         -v $SCYLLA_TARGET_FILE:/etc/scylla.d/prometheus/scylla_servers.yml \
+         -v $NODE_TARGET_FILE:/etc/scylla.d/prometheus/node_exporter_servers.yml \
          -p $PROMETHEUS_PORT:9090 --name $PROMETHEUS_NAME prom/prometheus:$PROMETHEUS_VERSION
 else
     echo "Loading prometheus data from $DATA_DIR"
-    sudo docker run -d $LOCAL -v $DATA_DIR:/prometheus:Z \
-         -v $PWD/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:Z \
-         -v $(readlink -m $SCYLLA_TARGET_FILE):/etc/scylla.d/prometheus/scylla_servers.yml:Z \
-         -v $(readlink -m $NODE_TARGET_FILE):/etc/scylla.d/prometheus/node_exporter_servers.yml:Z \
+    sudo docker run -d $LOCAL -v $DATA_DIR:/prometheus \
+         -v $PWD/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml \
+         -v $SCYLLA_TARGET_FILE:/etc/scylla.d/prometheus/scylla_servers.yml \
+         -v $NODE_TARGET_FILE:/etc/scylla.d/prometheus/node_exporter_servers.yml \
          -p $PROMETHEUS_PORT:9090 --name $PROMETHEUS_NAME prom/prometheus:$PROMETHEUS_VERSION
 fi
 
